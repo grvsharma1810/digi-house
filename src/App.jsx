@@ -1,8 +1,7 @@
 import "./App.css";
 import Navbar from "./shared-components/Navbar";
 
-function App() {    
-
+function App() {
     return (
         <div className="App">
             <Navbar />

@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Navbar() {
+function Navbar() {    
     const classes = useStyles();
     const { loggedInUser } = useUser();
 
@@ -82,7 +82,7 @@ function Navbar() {
                             <>
                                 <Avatar
                                     alt={loggedInUser.displayName}
-                                    src="/static/images/avatar/1.jpg"
+                                    src={loggedInUser.photoURL}
                                     className={classes.orange}
                                 />
                                 <Button
