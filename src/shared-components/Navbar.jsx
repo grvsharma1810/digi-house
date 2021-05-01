@@ -9,6 +9,8 @@ import { auth, provider } from "../firebase";
 import { useUser } from "../Providers/UserProvider";
 import green from "@material-ui/core/colors/green";
 import red from "@material-ui/core/colors/red";
+import deepOrange from "@material-ui/core/colors/deepOrange";
+import { Avatar } from "@material-ui/core";
 // import IconButton from "@material-ui/core/IconButton";
 // import MenuIcon from "@material-ui/icons/Menu";
 
@@ -28,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
         "&:hover": {
             backgroundColor: green[700],
         },
+        marginLeft: theme.spacing(1),
     },
     logoutButton: {
         color: "white",
@@ -35,6 +38,11 @@ const useStyles = makeStyles((theme) => ({
         "&:hover": {
             backgroundColor: red[700],
         },
+        marginLeft: theme.spacing(1),
+    },
+    orange: {
+        color: theme.palette.getContrastText(deepOrange[500]),
+        backgroundColor: deepOrange[500],
     },
 }));
 
@@ -71,14 +79,21 @@ function Navbar() {
                             </Button>
                         )}
                         {loggedInUser && (
-                            <Button
-                                className={classes.logoutButton}
-                                color="inherit"
-                                variant="contained"
-                                onClick={logout}
-                            >
-                                Log Out
-                            </Button>
+                            <>
+                                <Avatar
+                                    alt={loggedInUser.displayName}
+                                    src="/static/images/avatar/1.jpg"
+                                    className={classes.orange}
+                                />
+                                <Button
+                                    className={classes.logoutButton}
+                                    color="inherit"
+                                    variant="contained"
+                                    onClick={logout}
+                                >
+                                    Log Out
+                                </Button>
+                            </>
                         )}
                     </Toolbar>
                 </AppBar>
