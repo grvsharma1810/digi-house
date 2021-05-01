@@ -1,6 +1,7 @@
 import React from "react";
 
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
+import { useNavigate } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -11,18 +12,19 @@ import green from "@material-ui/core/colors/green";
 import red from "@material-ui/core/colors/red";
 import deepOrange from "@material-ui/core/colors/deepOrange";
 import { Avatar } from "@material-ui/core";
-// import IconButton from "@material-ui/core/IconButton";
-// import MenuIcon from "@material-ui/icons/Menu";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
     },
     menuButton: {
-        marginRight: theme.spacing(2),
+        marginLeft: theme.spacing(0),
     },
     title: {
         flexGrow: 1,
+        cursor: "pointer",
     },
     loginButton: {
         color: "white",
@@ -46,7 +48,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Navbar() {    
+function Navbar({ toggleDrawer }) {
+    const navigate = useNavigate();
     const classes = useStyles();
     const { loggedInUser } = useUser();
 
@@ -65,7 +68,11 @@ function Navbar() {
             <div className={classes.root}>
                 <AppBar position="static">
                     <Toolbar>
-                        <Typography variant="h6" className={classes.title}>
+                        <Typography
+                            onClick={() => navigate("/")}
+                            variant="h6"
+                            className={classes.title}
+                        >
                             DigiHouse
                         </Typography>
                         {!loggedInUser && (
@@ -95,6 +102,15 @@ function Navbar() {
                                 </Button>
                             </>
                         )}
+                        <IconButton
+                            onClick={toggleDrawer(true)}
+                            edge="start"
+                            className={classes.menuButton}
+                            color="inherit"
+                            aria-label="menu"
+                        >
+                            <MenuIcon />
+                        </IconButton>
                     </Toolbar>
                 </AppBar>
             </div>
