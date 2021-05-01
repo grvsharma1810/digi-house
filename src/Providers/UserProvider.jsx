@@ -8,12 +8,10 @@ export const UserProvider = ({ children }) => {
 
     auth.onAuthStateChanged((user) => {
         if (user) {
-            console.log("user looged in");            
             setLoggedInUser(user);
             console.log(user);
         } else {
             setLoggedInUser(null);
-            console.log("user logger out");
         }
     });
 
