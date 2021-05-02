@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useUser } from "../../Providers/UserProvider";
-import db from "../../firebase";
+import db, { firebase } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 import {
     Button,
     Container,
@@ -10,6 +11,7 @@ import {
     Radio,
     RadioGroup,
     FormControlLabel,
+    Grid,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -36,6 +38,7 @@ const initialFormValues = {
 };
 
 function CreateRoom() {
+    const navigate = useNavigate();
     const classes = useStyles();
     const { loggedInUser } = useUser();
     const [formValue, setFormValue] = useState(initialFormValues);
@@ -44,27 +47,34 @@ function CreateRoom() {
         event.preventDefault();
         event.stopPropagation();
         console.log(formValue);
-        db.collection("rooms").add({
-            uid: loggedInUser.uid,
-            uname: loggedInUser.name,
-            name: formValue.roomName,
-            startDateAndTime: formValue.startDateAndTime,
-            description: formValue.roomDesc,
-            type: formValue.type,
-            saved: false,
-        });
-        // .then((room) => {
-        //     console.log(room.id);
-        //     db.collection("rooms")
-        //         .doc(room.id)
-        //         .collection("participants")
-        //         .add({
-        //             name: "Ankit",
-        //         });
-        // })
-        // .catch((err) => {
-        //     alert(err);
-        // });
+        db.collection("rooms")
+            .add({
+                uid: loggedInUser.uid,
+                uname: loggedInUser.displayName,
+                uphotoURL: loggedInUser.photoURL,
+                uemail: loggedInUser.email,
+
+                name: formValue.roomName,
+                startDateAndTime: firebase.firestore.Timestamp.fromDate(
+                    new Date(formValue.startDateAndTime)
+                ),
+                description: formValue.roomDesc,
+                type: formValue.type,
+                saved: false,
+            })
+            .then((room) => {
+                navigate(`/rooms/${room.id}`);
+                // console.log(room.id);
+                // db.collection("rooms")
+                //     .doc(room.id)
+                //     .collection("participants")
+                //     .add({
+                //         name: "Ankit",
+                //     });
+            })
+            .catch((err) => {
+                alert(err.message);
+            });
     };
 
     return (
@@ -142,15 +152,16 @@ function CreateRoom() {
                     </RadioGroup>
                 </FormControl>
                 <br />
-                <Button
-                    className={classes.button}
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                >
-                    Create
-                </Button>
+                <Grid align="center" className={classes.button}>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                    >
+                        Create
+                    </Button>
+                </Grid>
             </form>
         </Container>
     );

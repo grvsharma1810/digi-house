@@ -52,7 +52,7 @@ function Navbar({ toggleDrawer }) {
     const classes = useStyles();
     const { loggedInUser } = useUser();
 
-    const login = () => {
+    const login = () => {                
         auth.signInWithPopup(provider)
             .then((result) => console.log(result))
             .catch((error) => alert(error.message));

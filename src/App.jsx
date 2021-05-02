@@ -6,8 +6,9 @@ import PrivateRoute from "./shared-components/PrivateRoute";
 import Home from "./pages/Home/Home";
 import LoginError from "./pages/LoginError/LoginError";
 import CreateRoom from "./pages/CreateRoom/CreateRoom";
-import Drawer from "./shared-components/Drawer";
 import YourChatrooms from "./pages/YourChatrooms/YourChatrooms";
+import RoomDetails from "./pages/RoomDetails/RoomDetails";
+import Drawer from "./shared-components/Drawer";
 
 function App() {
     const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -28,6 +29,7 @@ function App() {
             <Navbar toggleDrawer={toggleDrawer} />
             <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/rooms/:roomId" element={<RoomDetails />} />
                 <PrivateRoute path="/create-room" element={<CreateRoom />} />
                 <PrivateRoute
                     path="/your-chatrooms"

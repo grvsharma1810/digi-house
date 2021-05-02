@@ -10,15 +10,17 @@ function YourChatrooms() {
     console.log(rooms);
 
     React.useEffect(() => {
-        db.collection("rooms")
-            .where("uid", "==", loggedInUser.uid)
-            .onSnapshot((querySnapshot) => {
-                setRooms(
-                    querySnapshot.docs.map((doc) => {
-                        return { ...doc.data(), roomId: doc.id };
-                    })
-                );
-            });
+        if (loggedInUser) {
+            db.collection("rooms")
+                .where("uid", "==", loggedInUser.uid)
+                .onSnapshot((querySnapshot) => {
+                    setRooms(
+                        querySnapshot.docs.map((doc) => {
+                            return { ...doc.data(), roomId: doc.id };
+                        })
+                    );
+                });
+        }
     }, [loggedInUser]);
 
     return (
