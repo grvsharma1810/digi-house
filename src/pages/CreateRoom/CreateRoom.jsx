@@ -46,6 +46,7 @@ function CreateRoom() {
         console.log(formValue);
         db.collection("rooms").add({
             uid: loggedInUser.uid,
+            uname: loggedInUser.name,
             name: formValue.roomName,
             startDateAndTime: formValue.startDateAndTime,
             description: formValue.roomDesc,

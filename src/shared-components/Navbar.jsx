@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     menuButton: {
-        marginLeft: theme.spacing(0),
+        marginRight: theme.spacing(0),
     },
     title: {
         flexGrow: 1,
@@ -31,18 +31,17 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: green[500],
         "&:hover": {
             backgroundColor: green[700],
-        },
-        marginLeft: theme.spacing(1),
+        },        
     },
     logoutButton: {
         color: "white",
         backgroundColor: red[500],
         "&:hover": {
             backgroundColor: red[700],
-        },
-        marginLeft: theme.spacing(1),
+        }, 
     },
-    orange: {
+    avatar: {
+        marginRight: theme.spacing(1),
         color: theme.palette.getContrastText(deepOrange[500]),
         backgroundColor: deepOrange[500],
     },
@@ -68,6 +67,15 @@ function Navbar({ toggleDrawer }) {
             <div className={classes.root}>
                 <AppBar position="static">
                     <Toolbar>
+                        <IconButton
+                            onClick={toggleDrawer(true)}
+                            edge="start"
+                            className={classes.menuButton}
+                            color="inherit"
+                            aria-label="menu"
+                        >
+                            <MenuIcon />
+                        </IconButton>
                         <Typography
                             onClick={() => navigate("/")}
                             variant="h6"
@@ -90,7 +98,7 @@ function Navbar({ toggleDrawer }) {
                                 <Avatar
                                     alt={loggedInUser.displayName}
                                     src={loggedInUser.photoURL}
-                                    className={classes.orange}
+                                    className={classes.avatar}
                                 />
                                 <Button
                                     className={classes.logoutButton}
@@ -98,19 +106,10 @@ function Navbar({ toggleDrawer }) {
                                     variant="contained"
                                     onClick={logout}
                                 >
-                                    Log Out
+                                    LogOut
                                 </Button>
                             </>
                         )}
-                        <IconButton
-                            onClick={toggleDrawer(true)}
-                            edge="start"
-                            className={classes.menuButton}
-                            color="inherit"
-                            aria-label="menu"
-                        >
-                            <MenuIcon />
-                        </IconButton>
                     </Toolbar>
                 </AppBar>
             </div>

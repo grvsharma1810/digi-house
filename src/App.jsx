@@ -7,6 +7,7 @@ import Home from "./pages/Home/Home";
 import LoginError from "./pages/LoginError/LoginError";
 import CreateRoom from "./pages/CreateRoom/CreateRoom";
 import Drawer from "./shared-components/Drawer";
+import YourChatrooms from "./pages/YourChatrooms/YourChatrooms";
 
 function App() {
     const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -28,6 +29,10 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <PrivateRoute path="/create-room" element={<CreateRoom />} />
+                <PrivateRoute
+                    path="/your-chatrooms"
+                    element={<YourChatrooms />}
+                />
                 <Route path="/login-error" element={<LoginError />} />
             </Routes>
             <Drawer drawerOpen={drawerOpen} toggleDrawer={toggleDrawer} />
