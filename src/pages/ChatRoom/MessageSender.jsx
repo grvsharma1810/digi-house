@@ -43,7 +43,7 @@ function MessageSender({ room, participant }) {
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             uid: participant.uid,
             uname: participant.uname,
-            uphotoURL: participant.photoURL,
+            uphotoURL: participant.uphotoURL,
             content: message,
         });
     };

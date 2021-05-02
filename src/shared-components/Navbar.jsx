@@ -18,6 +18,9 @@ import MenuIcon from "@material-ui/icons/Menu";
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
+        position: "sticky",
+        top: 0,
+        zIndex: theme.zIndex.appBar,
     },
     menuButton: {
         marginRight: theme.spacing(0),

@@ -26,7 +26,7 @@ function App() {
     };
 
     return (
-        <div className="App">
+        <div style={{ height: "100%" }}>
             <Navbar toggleDrawer={toggleDrawer} />
             <Routes>
                 <Route path="/" element={<Home />} />

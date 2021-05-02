@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useUser } from "../../Providers/UserProvider";
 import db from "../../firebase";
@@ -13,11 +13,13 @@ import {
     Avatar,
 } from "@material-ui/core";
 import MessageSender from "./MessageSender";
+import MessagesBox from "./MessagesBox";
 
 const useStyles = makeStyles((theme) => ({
     content: {
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
+        height: "88%",
     },
     spinner: {
         textAlign: "center",
@@ -33,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 function ChatRoom() {
     const navigate = useNavigate();
+    const scrollRef = useRef();
     const { loggedInUser } = useUser();
     const classes = useStyles();
     const { roomId } = useParams();
@@ -51,6 +54,7 @@ function ChatRoom() {
                     db.collection("rooms")
                         .doc(roomId)
                         .collection("messages")
+                        .orderBy("timestamp", "asc")
                         .onSnapshot((querySnapshot) => {
                             setMessages(
                                 querySnapshot.docs.map((doc) => {
@@ -84,6 +88,10 @@ function ChatRoom() {
             });
     }, [roomId, loggedInUser]);
 
+    useEffect(() => {
+        scrollRef.current.scrollIntoView(false);
+    }, [messages]);
+
     return (
         <>
             {isRoomDetailsLoading && (
@@ -97,49 +105,29 @@ function ChatRoom() {
             )}
             {!isRoomDetailsLoading && (
                 <Container maxWidth="md" className={classes.content}>
-                    <Paper>
-                        <Box p={2}>
-                            <Typography variant="h5">{room.name}</Typography>
-                            <Typography variant="subtitle1">
-                                {room.description}
-                            </Typography>
-                            <Typography variant="body2">
-                                Started at{" "}
-                                {room.startDateAndTime
-                                    .toDate()
-                                    .toLocaleString()}
-                            </Typography>
-                        </Box>
-                    </Paper>
-                    <Box
-                        mt={3}
-                        mb={2}
-                        component="div"
-                        overflow="visible"
-                        height="100%"
-                    >
-                        <Grid container spacing={2}>
-                            <Grid item>
-                                <Avatar src={loggedInUser.photoURL} />
-                            </Grid>
-                            <Grid item xs>
-                                <Paper
-                                    variant="outlined"
-                                    className={classes.senderMessage}
-                                >
-                                    <Typography>
-                                        Truncation should be conditionally
-                                        applicable on this long line of text as
-                                        this is a much longer line than what the
-                                        container can support.
-                                    </Typography>
-                                </Paper>
-                            </Grid>
-                        </Grid>                                                                                 
+                    <Box display="flex" flexDirection="column" height="100%">
+                        <Paper>
+                            <Box p={2}>
+                                <Typography variant="h5">
+                                    {room.name}
+                                </Typography>
+                                <Typography variant="subtitle1">
+                                    {room.description}
+                                </Typography>
+                                <Typography variant="body2">
+                                    Started at{" "}
+                                    {room.startDateAndTime
+                                        .toDate()
+                                        .toLocaleString()}
+                                </Typography>
+                            </Box>
+                        </Paper>
+                        <MessagesBox messages={messages} />
+                        <MessageSender room={room} participant={participant} />
                     </Box>
-                    <MessageSender room={room} participant={participant} />
                 </Container>
             )}
+            <div ref={scrollRef}></div>
         </>
     );
 }
