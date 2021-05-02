@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import db from "../../firebase";
+import db, { firebase } from "../../firebase";
 import { useParams, useNavigate } from "react-router-dom";
 import { useUser } from "../../Providers/UserProvider";
 import { makeStyles } from "@material-ui/core/styles";
@@ -45,6 +45,7 @@ function RoomDetails() {
     const [room, setRoom] = useState(null);
     const { loggedInUser } = useUser();
     const [isRoomDetailsLoading, setIsRoomDetailsLoading] = useState(true);
+    console.log({ room }, room?.status === "live", room?.status === "saved");
 
     const startRoom = () => {
         if (room) {
@@ -52,6 +53,7 @@ function RoomDetails() {
                 .doc(room.roomId)
                 .update({
                     status: "live",
+                    startDateAndTime: firebase.firestore.Timestamp.now(),
                 })
                 .then((response) => {
                     db.collection("rooms")
@@ -61,8 +63,8 @@ function RoomDetails() {
                         .set({
                             role: "creator",
                             uname: room.uname,
-                            uphotoURL: loggedInUser.photoURL,
-                            uid: loggedInUser.uid,
+                            uphotoURL: loggedInUser?.photoURL,
+                            uid: loggedInUser?.uid,
                         })
                         .then(() => {
                             console.log("Room Created Successfully");
@@ -79,7 +81,7 @@ function RoomDetails() {
     };
 
     const enterRoom = () => {
-        if (room?.status === "live" || room?.status === "saved") {
+        if (room?.status !== "created") {
             setIsRoomDetailsLoading(true);
             db.collection("rooms")
                 .doc(room.roomId)
@@ -87,10 +89,12 @@ function RoomDetails() {
                 .doc(room.uid)
                 .set({
                     role:
-                        room.uid === loggedInUser.uid ? "creator" : "spectator",
+                        room.uid === loggedInUser?.uid
+                            ? "creator"
+                            : "spectator",
                     uname: room.uname,
-                    uphotoURL: loggedInUser.photoURL,
-                    uid: loggedInUser.uid,
+                    uphotoURL: loggedInUser?.photoURL,
+                    uid: loggedInUser?.uid,
                 })
                 .then(() => {
                     console.log("Entered Inside Room");
@@ -150,12 +154,22 @@ function RoomDetails() {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Typography variant="h4">{room.name}</Typography>
-                            <Box variant="subtitle1" fontWeight={500}>
-                                Starts at{" "}
-                                {room.startDateAndTime
-                                    .toDate()
-                                    .toLocaleString()}
-                            </Box>
+                            {room.status === "created" && (
+                                <Box variant="subtitle1" fontWeight={500}>
+                                    Starts at{" "}
+                                    {room.startDateAndTime
+                                        .toDate()
+                                        .toLocaleString()}
+                                </Box>
+                            )}
+                            {room.status !== "created" && (
+                                <Box variant="subtitle1" fontWeight={500}>
+                                    Started at{" "}
+                                    {room.startDateAndTime
+                                        .toDate()
+                                        .toLocaleString()}
+                                </Box>
+                            )}
                             <Typography variant="subtitle1">
                                 {room.description}
                             </Typography>
@@ -200,7 +214,7 @@ function RoomDetails() {
                         </Box>
                     </Paper>
                     {room.status === "created" &&
-                        room.uid === loggedInUser.uid && (
+                        room.uid === loggedInUser?.uid && (
                             <Grid align="center" fixed="true">
                                 <Grid item xs={12} md={4}>
                                     <Button
@@ -215,22 +229,21 @@ function RoomDetails() {
                                 </Grid>
                             </Grid>
                         )}
-                    {room.status === "live" ||
-                        (room.status === "saved" && (
-                            <Grid align="center" fixed="true">
-                                <Grid item xs={12} md={4}>
-                                    <Button
-                                        onClick={() => enterRoom()}
-                                        fullWidth
-                                        size="large"
-                                        variant="contained"
-                                        color="primary"
-                                    >
-                                        Enter
-                                    </Button>
-                                </Grid>
+                    {room.status !== "created" && (
+                        <Grid align="center" fixed="true">
+                            <Grid item xs={12} md={4}>
+                                <Button
+                                    onClick={() => enterRoom()}
+                                    fullWidth
+                                    size="large"
+                                    variant="contained"
+                                    color="primary"
+                                >
+                                    Enter
+                                </Button>
                             </Grid>
-                        ))}
+                        </Grid>
+                    )}
                 </Container>
             )}
         </>

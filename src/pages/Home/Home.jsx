@@ -12,18 +12,16 @@ function Home() {
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        if (loggedInUser) {
-            db.collection("rooms")
-                .where("type", "==", "public")
-                .orderBy("startDateAndTime", "desc")
-                .onSnapshot((querySnapshot) => {
-                    setRooms(
-                        querySnapshot.docs.map((doc) => {
-                            return { ...doc.data(), roomId: doc.id };
-                        })
-                    );
-                });
-        }
+        db.collection("rooms")
+            .where("type", "==", "public")
+            .orderBy("startDateAndTime", "desc")
+            .onSnapshot((querySnapshot) => {
+                setRooms(
+                    querySnapshot.docs.map((doc) => {
+                        return { ...doc.data(), roomId: doc.id };
+                    })
+                );
+            });
     }, [loggedInUser]);
 
     return (

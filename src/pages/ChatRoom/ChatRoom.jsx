@@ -40,10 +40,16 @@ function ChatRoom() {
             .then((doc) => {
                 if (doc.exists) {
                     setRoom({ ...doc.data(), roomId });
-                    var messagesCollectionRef = db
-                        .collection("rooms")
+                    db.collection("rooms")
                         .doc(roomId)
-                        .collection("messages");
+                        .collection("messages")
+                        .onSnapshot((querySnapshot) => {
+                            setMessages(
+                                querySnapshot.docs.map((doc) => {
+                                    return { ...doc.data(), messageId: doc.id };
+                                })
+                            );
+                        });
                     setIsRoomDetailsLoading(false);
                 } else {
                     // doc.data() will be undefined in this case
