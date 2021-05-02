@@ -60,7 +60,7 @@ function CreateRoom() {
                 ),
                 description: formValue.roomDesc,
                 type: formValue.type,
-                saved: false,
+                status: "created",
             })
             .then((room) => {
                 navigate(`/rooms/${room.id}`);

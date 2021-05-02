@@ -8,6 +8,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import LiveTvIcon from "@material-ui/icons/LiveTv";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles({
     list: {
@@ -39,11 +40,11 @@ export default function Drawer({ drawerOpen, toggleDrawer }) {
                 </ListItem>
                 <ListItem
                     button
-                    key="Your Chatrooms"
+                    key="Create Your Room"
                     onClick={() => navigate("/create-room")}
                 >
                     <ListItemIcon>
-                        <MeetingRoomIcon />
+                        <AddIcon />
                     </ListItemIcon>
                     <ListItemText primary="Create Your Room" />
                 </ListItem>

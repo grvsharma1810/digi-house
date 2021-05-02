@@ -28,7 +28,7 @@ function YourChatrooms() {
             <Grid container spacing={3}>
                 {rooms.map((room) => {
                     return (
-                        <Grid item xs={12} sm={6} md={4}>
+                        <Grid item xs={12} sm={6} md={4} key={room.roomId}>
                             <RoomCard room={room} />
                         </Grid>
                     );
