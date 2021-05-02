@@ -64,8 +64,7 @@ function CreateRoom() {
 
     const createRoom = (event) => {
         event.preventDefault();
-        event.stopPropagation();
-        console.log(formValue);
+        event.stopPropagation();        
         if (checkDataValidity(formValue)) {
             setIsLoading(true);
             let bucketName = "images";

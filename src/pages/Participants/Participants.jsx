@@ -15,8 +15,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function ParticipantsBox({ name, participants }) {
-    console.log(participants);
+function ParticipantsBox({ name, participants }) {    
     const classes = useStyles();
     return (
         <>

@@ -45,8 +45,7 @@ function RoomDetails() {
     const navigate = useNavigate();
     const [room, setRoom] = useState(null);
     const { loggedInUser } = useUser();
-    const [isRoomDetailsLoading, setIsRoomDetailsLoading] = useState(true);
-    console.log({ room }, room?.status === "live", room?.status === "saved");
+    const [isRoomDetailsLoading, setIsRoomDetailsLoading] = useState(true);    
 
     const startRoom = () => {
         if (room) {
@@ -70,8 +69,7 @@ function RoomDetails() {
                             raisedHand: false,
                         })
                         .then(() => {
-                            setIsRoomDetailsLoading(false);
-                            console.log("Room Created Successfully");
+                            setIsRoomDetailsLoading(false);                            
                             navigate("chats");
                         })
                         .catch((error) => {
@@ -101,8 +99,7 @@ function RoomDetails() {
                     uid: loggedInUser?.uid,
                     handRaised: false,
                 })
-                .then(() => {
-                    console.log("Joined Inside Room");
+                .then(() => {                    
                     navigate("chats");
                     setIsRoomDetailsLoading(false);
                 })
@@ -126,14 +123,12 @@ function RoomDetails() {
                 } else {
                     // doc.data() will be undefined in this case
                     setIsRoomDetailsLoading(false);
-                    alert("No such document!");
-                    console.log("No such document!");
+                    alert("No such document!");                    
                 }
             })
             .catch((error) => {
                 setIsRoomDetailsLoading(false);
-                alert(error.message);
-                console.log("Error getting document:", error);
+                alert(error.message);                
             });
     }, [roomId]);
 

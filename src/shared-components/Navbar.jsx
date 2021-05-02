@@ -57,7 +57,7 @@ function Navbar({ toggleDrawer }) {
 
     const login = () => {
         auth.signInWithPopup(provider)
-            .then((result) => console.log(result))
+            .then((result) => {})
             .catch((error) => alert(error.message));
     };
 

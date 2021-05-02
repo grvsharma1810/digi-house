@@ -6,9 +6,7 @@ import { Box, Grid, Container } from "@material-ui/core";
 
 function SavedChatrooms() {
     const [rooms, setRooms] = React.useState([]);
-    const { loggedInUser } = useUser();
-    console.log(rooms);
-
+    const { loggedInUser } = useUser();    
     React.useEffect(() => {
         if (loggedInUser) {
             db.collection("rooms")

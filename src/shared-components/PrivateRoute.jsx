@@ -3,7 +3,6 @@ import { useUser } from "../Providers/UserProvider";
 
 function PrivateRoute({ path, ...props }) {
     const { loggedInUser } = useUser();
-    console.log({ loggedInUser });
     return loggedInUser ? (
         <Route {...props} path={path} />
     ) : (

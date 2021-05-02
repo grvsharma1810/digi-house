@@ -75,8 +75,7 @@ function ChatRoom() {
                             .doc(roomId)
                             .collection("participants")
                             .doc(loggedInUser.uid)
-                            .onSnapshot((doc) => {
-                                console.log(doc.data());
+                            .onSnapshot((doc) => {                                
                                 setParticipant(doc.data());
                             });
                     }
@@ -84,14 +83,12 @@ function ChatRoom() {
                 } else {
                     // doc.data() will be undefined in this case
                     setIsRoomDetailsLoading(false);
-                    alert("No such document!");
-                    console.log("No such document!");
+                    alert("No such document!");                    
                 }
             })
             .catch((error) => {
                 setIsRoomDetailsLoading(false);
-                alert(error.message);
-                console.log("Error getting document:", error);
+                alert(error.message);                
             });
     }, [roomId, loggedInUser]);
 

@@ -26,13 +26,11 @@ function HandsRaised({ dialogOpen, setDialogOpen }) {
     const [
         participantsWithRaisedHands,
         setParticipantsWithRaisedHands,
-    ] = useState([]);
-    console.log("From Dialog", { participantsWithRaisedHands });
+    ] = useState([]);    
     const classes = useStyles();
     const { roomId } = useParams();
 
-    const allowToWrite = (participant) => {
-        console.log(participant);
+    const allowToWrite = (participant) => {        
         db.collection("rooms")
             .doc(roomId)
             .collection("participants")
