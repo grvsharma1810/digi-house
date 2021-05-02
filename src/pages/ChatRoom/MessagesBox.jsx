@@ -26,7 +26,7 @@ function MessagesBox({ messages }) {
     const classes = useStyles();
 
     return (
-        <Box mt={3} mb={2} height="100%" className={classes.chatBox}>
+        <Box pt={3} pb={2} height="100%" className={classes.chatBox}>
             {messages.map((message) => {
                 return (
                     <Grid container spacing={2} key={message.messageId}>

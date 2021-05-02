@@ -1,35 +1,34 @@
-import "./Home.css";
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { Button, Box, Grid, Container, Typography } from "@material-ui/core";
 import { useUser } from "../../Providers/UserProvider";
 import db from "../../firebase";
 import RoomCard from "../../shared-components/RoomCard";
+import { Box, Grid, Container } from "@material-ui/core";
 
-function Home() {
+function SavedChatrooms() {
     const [rooms, setRooms] = React.useState([]);
     const { loggedInUser } = useUser();
-    const navigate = useNavigate();
+    console.log(rooms);
 
     React.useEffect(() => {
-        db.collection("rooms")
-            .where("type", "==", "public")
-            .orderBy("startDateAndTime", "desc")
-            .onSnapshot((querySnapshot) => {
-                setRooms(
-                    querySnapshot.docs
-                        .map((doc) => {
-                            return { ...doc.data(), roomId: doc.id };
-                        })
-                        .filter((data) => data.status != "saved")
-                );
-            });
+        if (loggedInUser) {
+            db.collection("rooms")
+                .where("uid", "==", loggedInUser.uid)
+                .onSnapshot((querySnapshot) => {
+                    setRooms(
+                        querySnapshot.docs
+                            .map((doc) => {
+                                return { ...doc.data(), roomId: doc.id };
+                            })
+                            .filter((data) => data.status === "saved")
+                    );
+                });
+        }
     }, [loggedInUser]);
 
     return (
         <Container>
             <Box fontSize={20} mt={2} fontWeight={500}>
-                Chatrooms For You
+                Saved Chatrooms
             </Box>
             {rooms.length == 0 && (
                 <Box fontSize={16} mt={2}>
@@ -59,4 +58,4 @@ function Home() {
     );
 }
 
-export default Home;
+export default SavedChatrooms;

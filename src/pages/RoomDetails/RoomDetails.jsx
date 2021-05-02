@@ -64,7 +64,7 @@ function RoomDetails() {
                         .doc(loggedInUser?.uid)
                         .set({
                             role: "creator",
-                            uname: room.uname,
+                            uname: loggedInUser.displayName,
                             uphotoURL: loggedInUser?.photoURL,
                             uid: loggedInUser?.uid,
                             raisedHand: false,
@@ -96,7 +96,7 @@ function RoomDetails() {
                         room.uid === loggedInUser?.uid
                             ? "creator"
                             : "spectator",
-                    uname: room.uname,
+                    uname: loggedInUser.displayName,
                     uphotoURL: loggedInUser?.photoURL,
                     uid: loggedInUser?.uid,
                     handRaised: false,

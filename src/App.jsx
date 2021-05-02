@@ -11,6 +11,7 @@ import RoomDetails from "./pages/RoomDetails/RoomDetails";
 import ChatRoom from "./pages/ChatRoom/ChatRoom";
 import Drawer from "./shared-components/Drawer";
 import Participants from "./pages/Participants/Participants";
+import SavedChatrooms from "./pages/SavedChatrooms/SavedChatrooms";
 
 function App() {
     const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -41,6 +42,10 @@ function App() {
                 <PrivateRoute
                     path="/your-chatrooms"
                     element={<YourChatrooms />}
+                />
+                <PrivateRoute
+                    path="/saved-chatrooms"
+                    element={<SavedChatrooms />}
                 />
                 <Route path="/login-error" element={<LoginError />} />
             </Routes>

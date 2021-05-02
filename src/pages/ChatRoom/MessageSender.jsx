@@ -87,6 +87,7 @@ function MessageSender({ room, participant }) {
                     </InputLabel>
                     <OutlinedInput
                         multiline
+                        disabled={participant?.role === "spectator"}
                         id="standard-adornment-message"
                         type="text"
                         value={message}
@@ -97,6 +98,7 @@ function MessageSender({ room, participant }) {
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
+                                    disabled={participant?.role === "spectator"}
                                     aria-label="toggle message visibility"
                                     onClick={() =>
                                         setEmojiPickerView((view) => !view)
@@ -111,7 +113,10 @@ function MessageSender({ room, participant }) {
                     />
                 </FormControl>
                 <Box display="flex">
-                    <IconButton onClick={() => sendMessage(message)}>
+                    <IconButton
+                        disabled={participant?.role === "spectator"}
+                        onClick={() => sendMessage(message)}
+                    >
                         <SendIcon />
                     </IconButton>
                     {room?.uid !== participant?.uid && (

@@ -28,17 +28,30 @@ function YourChatrooms() {
             <Box fontSize={20} mt={2} fontWeight={500}>
                 Your Chatrooms
             </Box>
-            <Box mt={2} mb={2}>
-                <Grid container spacing={3}>
-                    {rooms.map((room) => {
-                        return (
-                            <Grid item xs={12} sm={6} md={4} key={room.roomId}>
-                                <RoomCard room={room} />
-                            </Grid>
-                        );
-                    })}
-                </Grid>
-            </Box>
+            {rooms.length == 0 && (
+                <Box fontSize={16} mt={2}>
+                    No Room Available
+                </Box>
+            )}
+            {rooms.length > 0 && (
+                <Box mt={2} mb={2}>
+                    <Grid container spacing={3}>
+                        {rooms.map((room) => {
+                            return (
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sm={6}
+                                    md={4}
+                                    key={room.roomId}
+                                >
+                                    <RoomCard room={room} />
+                                </Grid>
+                            );
+                        })}
+                    </Grid>
+                </Box>
+            )}
         </Container>
     );
 }

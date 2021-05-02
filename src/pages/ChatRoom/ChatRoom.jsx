@@ -10,16 +10,19 @@ import {
     Box,
     Paper,
     CircularProgress,
-    Avatar,
+    CardHeader,
+    Card,
+    IconButton,
+    CardActions,
+    CardContent,
 } from "@material-ui/core";
 import MessageSender from "./MessageSender";
 import MessagesBox from "./MessagesBox";
 import Spinner from "../../shared-components/Spinner";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import ChatHeader from "./ChatHeader";
 
 const useStyles = makeStyles((theme) => ({
-    chatHeader: {
-        cursor: "pointer",
-    },
     content: {
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
@@ -102,27 +105,7 @@ function ChatRoom() {
             {!isRoomDetailsLoading && (
                 <Container maxWidth="md" className={classes.content}>
                     <Box display="flex" flexDirection="column" height="100%">
-                        <Paper
-                            onClick={() =>
-                                navigate(`/rooms/${room.roomId}/participants`)
-                            }
-                            className={classes.chatHeader}
-                        >
-                            <Box p={2}>
-                                <Typography variant="h5">
-                                    {room.name}
-                                </Typography>
-                                <Typography variant="subtitle1">
-                                    {room.description}
-                                </Typography>
-                                <Typography variant="body2">
-                                    Started at{" "}
-                                    {room.startDateAndTime
-                                        .toDate()
-                                        .toLocaleString()}
-                                </Typography>
-                            </Box>
-                        </Paper>
+                        <ChatHeader room={room} participant={participant} />
                         <MessagesBox messages={messages} />
                         <MessageSender room={room} participant={participant} />
                     </Box>
