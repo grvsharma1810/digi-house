@@ -49,6 +49,7 @@ function RoomDetails() {
 
     const startRoom = () => {
         if (room) {
+            setIsRoomDetailsLoading(true);
             db.collection("rooms")
                 .doc(room.roomId)
                 .update({
@@ -59,14 +60,16 @@ function RoomDetails() {
                     db.collection("rooms")
                         .doc(room.roomId)
                         .collection("participants")
-                        .doc(room.uid)
+                        .doc(loggedInUser?.uid)
                         .set({
                             role: "creator",
                             uname: room.uname,
                             uphotoURL: loggedInUser?.photoURL,
                             uid: loggedInUser?.uid,
+                            raisedHand: false,
                         })
                         .then(() => {
+                            setIsRoomDetailsLoading(false);
                             console.log("Room Created Successfully");
                             navigate("chats");
                         })
@@ -80,13 +83,13 @@ function RoomDetails() {
         }
     };
 
-    const enterRoom = () => {
+    const joinRoom = () => {
         if (room?.status !== "created") {
             setIsRoomDetailsLoading(true);
             db.collection("rooms")
                 .doc(room.roomId)
                 .collection("participants")
-                .doc(room.uid)
+                .doc(loggedInUser?.uid)
                 .set({
                     role:
                         room.uid === loggedInUser?.uid
@@ -95,9 +98,10 @@ function RoomDetails() {
                     uname: room.uname,
                     uphotoURL: loggedInUser?.photoURL,
                     uid: loggedInUser?.uid,
+                    handRaised: false,
                 })
                 .then(() => {
-                    console.log("Entered Inside Room");
+                    console.log("Joined Inside Room");
                     navigate("chats");
                     setIsRoomDetailsLoading(false);
                 })
@@ -229,17 +233,17 @@ function RoomDetails() {
                                 </Grid>
                             </Grid>
                         )}
-                    {room.status !== "created" && (
+                    {room.status !== "created" && loggedInUser && (
                         <Grid align="center" fixed="true">
                             <Grid item xs={12} md={4}>
                                 <Button
-                                    onClick={() => enterRoom()}
+                                    onClick={() => joinRoom()}
                                     fullWidth
                                     size="large"
                                     variant="contained"
                                     color="primary"
                                 >
-                                    Enter
+                                    JOIN
                                 </Button>
                             </Grid>
                         </Grid>

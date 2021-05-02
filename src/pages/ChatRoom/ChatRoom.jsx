@@ -10,7 +10,9 @@ import {
     Box,
     Paper,
     CircularProgress,
+    Avatar,
 } from "@material-ui/core";
+import MessageSender from "./MessageSender";
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -21,7 +23,12 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "center",
         padding: theme.spacing(4),
     },
-    header: {},
+    senderMessage: {
+        maxWidth: "100%",
+        width: "fit-content",
+        marginRight: theme.spacing(6),
+        padding: theme.spacing(2),
+    },
 }));
 
 function ChatRoom() {
@@ -78,9 +85,108 @@ function ChatRoom() {
             )}
             {!isRoomDetailsLoading && (
                 <Container maxWidth="md" className={classes.content}>
-                    <Paper elevation={4}>
-                        <Box p={1}>{room.name}</Box>
+                    <Paper>
+                        <Box p={2}>
+                            <Typography variant="h5">{room.name}</Typography>
+                            <Typography variant="subtitle1">
+                                {room.description}
+                            </Typography>
+                            <Typography variant="body2">
+                                Started at{" "}
+                                {room.startDateAndTime
+                                    .toDate()
+                                    .toLocaleString()}
+                            </Typography>
+                        </Box>
                     </Paper>
+                    <Box
+                        mt={3}
+                        mb={2}
+                        component="div"
+                        overflow="visible"
+                        height="100%"
+                    >
+                        <Grid container spacing={2}>
+                            <Grid item>
+                                <Avatar src={loggedInUser.photoURL} />
+                            </Grid>
+                            <Grid item xs>
+                                <Paper
+                                    variant="outlined"
+                                    className={classes.senderMessage}
+                                >
+                                    <Typography>
+                                        Truncation should be conditionally
+                                        applicable on this long line of text as
+                                        this is a much longer line than what the
+                                        container can support.
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item>
+                                <Avatar src={loggedInUser.photoURL} />
+                            </Grid>
+                            <Grid item xs>
+                                <Paper
+                                    variant="outlined"
+                                    className={classes.senderMessage}
+                                >
+                                    <Typography>
+                                        Truncation should be conditionally
+                                        applicable.
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item>
+                                <Avatar src={loggedInUser.photoURL} />
+                            </Grid>
+                            <Grid item xs>
+                                <Paper
+                                    variant="outlined"
+                                    className={classes.senderMessage}
+                                >
+                                    <Typography>
+                                        Truncation should be conditionally
+                                        applicable on this long line of text as
+                                        this is a much longer.
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item>
+                                <Avatar src={loggedInUser.photoURL} />
+                            </Grid>
+                            <Grid item xs>
+                                <Paper
+                                    variant="outlined"
+                                    className={classes.senderMessage}
+                                >
+                                    <Typography>Truncation.</Typography>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item>
+                                <Avatar src={loggedInUser.photoURL} />
+                            </Grid>
+                            <Grid item xs>
+                                <Paper
+                                    variant="outlined"
+                                    className={classes.senderMessage}
+                                >
+                                    <Typography>
+                                        Truncation should be .
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                    <MessageSender room={room} loggedInUser={loggedInUser} />
                 </Container>
             )}
         </>

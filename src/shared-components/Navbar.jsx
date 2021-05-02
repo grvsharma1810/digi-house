@@ -31,14 +31,14 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: green[500],
         "&:hover": {
             backgroundColor: green[700],
-        },        
+        },
     },
     logoutButton: {
         color: "white",
         backgroundColor: red[500],
         "&:hover": {
             backgroundColor: red[700],
-        }, 
+        },
     },
     avatar: {
         marginRight: theme.spacing(1),
@@ -52,7 +52,7 @@ function Navbar({ toggleDrawer }) {
     const classes = useStyles();
     const { loggedInUser } = useUser();
 
-    const login = () => {                
+    const login = () => {
         auth.signInWithPopup(provider)
             .then((result) => console.log(result))
             .catch((error) => alert(error.message));
@@ -60,6 +60,7 @@ function Navbar({ toggleDrawer }) {
 
     const logout = () => {
         auth.signOut();
+        navigate("/");
     };
 
     return (
