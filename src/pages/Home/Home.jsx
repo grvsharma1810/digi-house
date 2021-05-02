@@ -28,19 +28,7 @@ function Home() {
 
     return (
         <>
-            <Box m={4}>
-                <Grid align="center">
-                    <Button
-                        onClick={() => navigate("/create-room")}
-                        variant="contained"
-                        color="secondary"
-                        size="large"
-                    >
-                        Create Chat Room
-                    </Button>
-                </Grid>
-            </Box>
-            <Box ml={4} mr={4}>
+            <Box m={3}>
                 <Grid container spacing={3}>
                     {rooms.map((room) => {
                         return (

@@ -40,6 +40,16 @@ export default function Drawer({ drawerOpen, toggleDrawer }) {
                 <ListItem
                     button
                     key="Your Chatrooms"
+                    onClick={() => navigate("/create-room")}
+                >
+                    <ListItemIcon>
+                        <MeetingRoomIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Create Your Room" />
+                </ListItem>
+                <ListItem
+                    button
+                    key="Your Chatrooms"
                     onClick={() => navigate("/your-chatrooms")}
                 >
                     <ListItemIcon>
