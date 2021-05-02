@@ -1,7 +1,7 @@
 import "./Home.css";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Box, Grid } from "@material-ui/core";
+import { Button, Box, Grid, Container } from "@material-ui/core";
 import { useUser } from "../../Providers/UserProvider";
 import db from "../../firebase";
 import RoomCard from "../../shared-components/RoomCard";
@@ -25,8 +25,9 @@ function Home() {
     }, [loggedInUser]);
 
     return (
-        <>
-            <Box m={3}>
+        <Container>
+            <Box fontSize={26} mt={2}>Handpicked Chatroom For You</Box>
+            <Box mt={2} mb={2}>
                 <Grid container spacing={3}>
                     {rooms.map((room) => {
                         return (
@@ -37,7 +38,7 @@ function Home() {
                     })}
                 </Grid>
             </Box>
-        </>
+        </Container>
     );
 }
 

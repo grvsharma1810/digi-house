@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import db, { firebase } from "../../firebase";
 import { makeStyles } from "@material-ui/core/styles";
 import "emoji-mart/css/emoji-mart.css";
@@ -19,7 +19,7 @@ import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 
 const useStyles = makeStyles((theme) => ({}));
 
-function MessageSender({ room, loggedInUser }) {
+function MessageSender({ room, participant }) {
     const classes = useStyles();
     const [emojiPickerView, setEmojiPickerView] = useState(false);
     const [handRaised, setHandRaised] = useState(false);
@@ -31,7 +31,7 @@ function MessageSender({ room, loggedInUser }) {
         db.collection("rooms")
             .doc(room.roomId)
             .collection("participants")
-            .doc(loggedInUser.uid)
+            .doc(participant.uid)
             .update({
                 handRaised: newHandRaised,
             });
@@ -41,9 +41,9 @@ function MessageSender({ room, loggedInUser }) {
         setMessage("");
         db.collection("rooms").doc(room.roomId).collection("messages").add({
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            uid: loggedInUser.uid,
-            uname: loggedInUser.displayName,
-            uphotoURL: loggedInUser.photoURL,
+            uid: participant.uid,
+            uname: participant.uname,
+            uphotoURL: participant.photoURL,
             content: message,
         });
     };
@@ -59,6 +59,12 @@ function MessageSender({ room, loggedInUser }) {
     const addEmoji = (emoji) => {
         setMessage((message) => message.concat(emoji.native));
     };
+
+    useEffect(() => {
+        if (participant) {
+            setHandRaised(participant.handRaised);
+        }
+    }, [participant]);
 
     return (
         <>
@@ -108,7 +114,7 @@ function MessageSender({ room, loggedInUser }) {
                     <IconButton onClick={() => sendMessage(message)}>
                         <SendIcon />
                     </IconButton>
-                    {room.uid !== loggedInUser.uid && (
+                    {room?.uid !== participant?.uid && (
                         <IconButton
                             color={handRaised ? "secondary" : "default"}
                             onClick={toggleHandRaise}

@@ -38,6 +38,7 @@ function ChatRoom() {
     const { roomId } = useParams();
     const [room, setRoom] = useState(null);
     const [messages, setMessages] = useState([]);
+    const [participant, setParticipant] = useState(null);
     const [isRoomDetailsLoading, setIsRoomDetailsLoading] = useState(true);
 
     useEffect(() => {
@@ -57,6 +58,17 @@ function ChatRoom() {
                                 })
                             );
                         });
+
+                    if (loggedInUser) {
+                        db.collection("rooms")
+                            .doc(roomId)
+                            .collection("participants")
+                            .doc(loggedInUser.uid)
+                            .onSnapshot((doc) => {
+                                console.log(doc.data());
+                                setParticipant(doc.data());
+                            });
+                    }
                     setIsRoomDetailsLoading(false);
                 } else {
                     // doc.data() will be undefined in this case
@@ -70,7 +82,7 @@ function ChatRoom() {
                 alert(error.message);
                 console.log("Error getting document:", error);
             });
-    }, [roomId]);
+    }, [roomId, loggedInUser]);
 
     return (
         <>
@@ -123,70 +135,9 @@ function ChatRoom() {
                                     </Typography>
                                 </Paper>
                             </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item>
-                                <Avatar src={loggedInUser.photoURL} />
-                            </Grid>
-                            <Grid item xs>
-                                <Paper
-                                    variant="outlined"
-                                    className={classes.senderMessage}
-                                >
-                                    <Typography>
-                                        Truncation should be conditionally
-                                        applicable.
-                                    </Typography>
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item>
-                                <Avatar src={loggedInUser.photoURL} />
-                            </Grid>
-                            <Grid item xs>
-                                <Paper
-                                    variant="outlined"
-                                    className={classes.senderMessage}
-                                >
-                                    <Typography>
-                                        Truncation should be conditionally
-                                        applicable on this long line of text as
-                                        this is a much longer.
-                                    </Typography>
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item>
-                                <Avatar src={loggedInUser.photoURL} />
-                            </Grid>
-                            <Grid item xs>
-                                <Paper
-                                    variant="outlined"
-                                    className={classes.senderMessage}
-                                >
-                                    <Typography>Truncation.</Typography>
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item>
-                                <Avatar src={loggedInUser.photoURL} />
-                            </Grid>
-                            <Grid item xs>
-                                <Paper
-                                    variant="outlined"
-                                    className={classes.senderMessage}
-                                >
-                                    <Typography>
-                                        Truncation should be .
-                                    </Typography>
-                                </Paper>
-                            </Grid>
-                        </Grid>
+                        </Grid>                                                                                 
                     </Box>
-                    <MessageSender room={room} loggedInUser={loggedInUser} />
+                    <MessageSender room={room} participant={participant} />
                 </Container>
             )}
         </>
