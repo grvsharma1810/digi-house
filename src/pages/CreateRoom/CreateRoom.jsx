@@ -45,34 +45,49 @@ function CreateRoom() {
     const [formValue, setFormValue] = useState(initialFormValues);
     const [isLoading, setIsLoading] = useState(false);
 
+    const checkDataValidity = (formValue) => {
+        if (
+            formValue.roomName === "" ||
+            formValue.roomDesc === "" ||
+            formValue.type === ""
+        ) {
+            return false;
+        }
+        return true;
+    };
+
     const createRoom = (event) => {
         event.preventDefault();
         event.stopPropagation();
         console.log(formValue);
-        setIsLoading(true);
-        db.collection("rooms")
-            .add({
-                uid: loggedInUser.uid,
-                uname: loggedInUser.displayName,
-                uphotoURL: loggedInUser.photoURL,
-                uemail: loggedInUser.email,
+        if (checkDataValidity(formValue)) {
+            setIsLoading(true);
+            db.collection("rooms")
+                .add({
+                    uid: loggedInUser.uid,
+                    uname: loggedInUser.displayName,
+                    uphotoURL: loggedInUser.photoURL,
+                    uemail: loggedInUser.email,
 
-                name: formValue.roomName,
-                startDateAndTime: firebase.firestore.Timestamp.fromDate(
-                    new Date(formValue.startDateAndTime)
-                ),
-                description: formValue.roomDesc,
-                type: formValue.type,
-                status: "created",
-            })
-            .then((room) => {
-                setIsLoading(false);
-                navigate(`/rooms/${room.id}`);
-            })
-            .catch((err) => {
-                setIsLoading(false);
-                alert(err.message);
-            });
+                    name: formValue.roomName,
+                    startDateAndTime: firebase.firestore.Timestamp.fromDate(
+                        new Date(formValue.startDateAndTime)
+                    ),
+                    description: formValue.roomDesc,
+                    type: formValue.type,
+                    status: "created",
+                })
+                .then((room) => {
+                    setIsLoading(false);
+                    navigate(`/rooms/${room.id}`);
+                })
+                .catch((err) => {
+                    setIsLoading(false);
+                    alert(err.message);
+                });
+        } else {
+            alert("Please fill all the details");
+        }
     };
 
     return (

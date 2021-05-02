@@ -226,7 +226,7 @@ function RoomDetails() {
                                 </Grid>
                             </Grid>
                         )}
-                    {room.status !== "created" && loggedInUser && (
+                    {room.status === "live" && loggedInUser && (
                         <Grid align="center" fixed="true">
                             <Grid item xs={12} md={4}>
                                 <Button
@@ -237,6 +237,21 @@ function RoomDetails() {
                                     color="primary"
                                 >
                                     JOIN
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    )}
+                    {room.status === "saved" && loggedInUser && (
+                        <Grid align="center" fixed="true">
+                            <Grid item xs={12} md={4}>
+                                <Button
+                                    onClick={() => joinRoom()}
+                                    fullWidth
+                                    size="large"
+                                    variant="contained"
+                                    color="primary"
+                                >
+                                    VIEW
                                 </Button>
                             </Grid>
                         </Grid>
