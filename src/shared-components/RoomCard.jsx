@@ -50,7 +50,7 @@ export default function RoomCard({ room }) {
                 />
                 <CardMedia
                     className={classes.media}
-                    image="https://source.unsplash.com/random/1600x900"
+                    image={`${room.roomPhotoURL}`}
                     title={room.name}
                 />
                 {/* <CardContent>

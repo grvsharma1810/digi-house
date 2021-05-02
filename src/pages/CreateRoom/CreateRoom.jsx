@@ -13,6 +13,8 @@ import {
     RadioGroup,
     FormControlLabel,
     Grid,
+    Box,
+    Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -36,6 +38,7 @@ const initialFormValues = {
     roomDesc: "",
     startDateAndTime: "2021-05-01T10:30",
     type: "",
+    files: null,
 };
 
 function CreateRoom() {
@@ -49,12 +52,15 @@ function CreateRoom() {
         if (
             formValue.roomName === "" ||
             formValue.roomDesc === "" ||
-            formValue.type === ""
+            formValue.type === "" ||
+            formValue.files === null
         ) {
             return false;
         }
         return true;
     };
+
+    const savePhoto = () => {};
 
     const createRoom = (event) => {
         event.preventDefault();
@@ -62,29 +68,42 @@ function CreateRoom() {
         console.log(formValue);
         if (checkDataValidity(formValue)) {
             setIsLoading(true);
-            db.collection("rooms")
-                .add({
-                    uid: loggedInUser.uid,
-                    uname: loggedInUser.displayName,
-                    uphotoURL: loggedInUser.photoURL,
-                    uemail: loggedInUser.email,
-
-                    name: formValue.roomName,
-                    startDateAndTime: firebase.firestore.Timestamp.fromDate(
-                        new Date(formValue.startDateAndTime)
-                    ),
-                    description: formValue.roomDesc,
-                    type: formValue.type,
-                    status: "created",
-                })
-                .then((room) => {
-                    setIsLoading(false);
-                    navigate(`/rooms/${room.id}`);
-                })
-                .catch((err) => {
-                    setIsLoading(false);
-                    alert(err.message);
+            let bucketName = "images";
+            let file = formValue.files[0];
+            let storageRef = firebase
+                .storage()
+                .ref(`${bucketName}/${file.name}`);
+            storageRef.put(file).then(() => {
+                let storageRef = firebase.storage().ref();
+                let spaceRef = storageRef.child(
+                    "images/" + formValue.files[0].name
+                );
+                spaceRef.getDownloadURL().then((downloadURL) => {
+                    db.collection("rooms")
+                        .add({
+                            uid: loggedInUser.uid,
+                            uname: loggedInUser.displayName,
+                            uphotoURL: loggedInUser.photoURL,
+                            uemail: loggedInUser.email,
+                            roomPhotoURL: downloadURL,
+                            name: formValue.roomName,
+                            startDateAndTime: firebase.firestore.Timestamp.fromDate(
+                                new Date(formValue.startDateAndTime)
+                            ),
+                            description: formValue.roomDesc,
+                            type: formValue.type,
+                            status: "created",
+                        })
+                        .then((room) => {
+                            setIsLoading(false);
+                            navigate(`/rooms/${room.id}`);
+                        })
+                        .catch((err) => {
+                            setIsLoading(false);
+                            alert(err.message);
+                        });
                 });
+            });
         } else {
             alert("Please fill all the details");
         }
@@ -92,7 +111,7 @@ function CreateRoom() {
 
     return (
         <>
-            {isLoading && <Spinner />}
+            {isLoading && <Spinner description={`This might take some time`} />}
             {!isLoading && (
                 <Container maxWidth="sm">
                     <form onSubmit={createRoom} noValidate autoComplete="off">
@@ -171,6 +190,19 @@ function CreateRoom() {
                             </RadioGroup>
                         </FormControl>
                         <br />
+                        <Box mt={1}>
+                            <Typography>Upload Photo</Typography>
+                            <input
+                                type="file"
+                                onChange={(e) =>
+                                    setFormValue((value) => ({
+                                        ...value,
+                                        files: e.target.files,
+                                    }))
+                                }
+                                placeholder="Choose File"
+                            />
+                        </Box>
                         <Grid align="center" className={classes.button}>
                             <Button
                                 type="submit"

@@ -146,7 +146,7 @@ function RoomDetails() {
                         <Grid item xs={12} sm={4}>
                             <img
                                 className={classes.img}
-                                src="https://source.unsplash.com/random/1600x900"
+                                src={`${room.roomPhotoURL}`}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
