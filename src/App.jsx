@@ -10,6 +10,7 @@ import YourChatrooms from "./pages/YourChatrooms/YourChatrooms";
 import RoomDetails from "./pages/RoomDetails/RoomDetails";
 import ChatRoom from "./pages/ChatRoom/ChatRoom";
 import Drawer from "./shared-components/Drawer";
+import Participants from "./pages/Participants/Participants";
 
 function App() {
     const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -32,6 +33,10 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/rooms/:roomId" element={<RoomDetails />} />
                 <Route path="/rooms/:roomId/chats" element={<ChatRoom />} />
+                <Route
+                    path="/rooms/:roomId/participants"
+                    element={<Participants />}
+                />
                 <PrivateRoute path="/create-room" element={<CreateRoom />} />
                 <PrivateRoute
                     path="/your-chatrooms"

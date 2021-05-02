@@ -26,7 +26,7 @@ function Home() {
 
     return (
         <Container>
-            <Box fontSize={26} mt={2}>Handpicked Chatroom For You</Box>
+            <Box fontSize={20} mt={2} fontWeight={500}>Chatrooms For You</Box>
             <Box mt={2} mb={2}>
                 <Grid container spacing={3}>
                     {rooms.map((room) => {

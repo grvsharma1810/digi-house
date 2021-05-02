@@ -14,8 +14,12 @@ import {
 } from "@material-ui/core";
 import MessageSender from "./MessageSender";
 import MessagesBox from "./MessagesBox";
+import Spinner from "../../shared-components/Spinner";
 
 const useStyles = makeStyles((theme) => ({
+    chatHeader: {
+        cursor: "pointer",
+    },
     content: {
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
@@ -94,19 +98,16 @@ function ChatRoom() {
 
     return (
         <>
-            {isRoomDetailsLoading && (
-                <Container className={classes.spinner}>
-                    <CircularProgress
-                        color="secondary"
-                        size={60}
-                        thickness={4}
-                    />
-                </Container>
-            )}
+            {isRoomDetailsLoading && <Spinner />}
             {!isRoomDetailsLoading && (
                 <Container maxWidth="md" className={classes.content}>
                     <Box display="flex" flexDirection="column" height="100%">
-                        <Paper>
+                        <Paper
+                            onClick={() =>
+                                navigate(`/rooms/${room.roomId}/participants`)
+                            }
+                            className={classes.chatHeader}
+                        >
                             <Box p={2}>
                                 <Typography variant="h5">
                                     {room.name}

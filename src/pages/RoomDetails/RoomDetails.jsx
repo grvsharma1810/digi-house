@@ -13,6 +13,7 @@ import {
     Avatar,
     Button,
 } from "@material-ui/core";
+import Spinner from "../../shared-components/Spinner";
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -138,15 +139,7 @@ function RoomDetails() {
 
     return (
         <>
-            {isRoomDetailsLoading && (
-                <Container className={classes.spinner}>
-                    <CircularProgress
-                        color="secondary"
-                        size={60}
-                        thickness={4}
-                    />
-                </Container>
-            )}
+            {isRoomDetailsLoading && <Spinner />}
             {!isRoomDetailsLoading && (
                 <Container maxWidth="md" className={classes.content}>
                     <Grid container spacing={2}>

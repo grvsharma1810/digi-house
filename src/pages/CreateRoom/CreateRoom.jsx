@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useUser } from "../../Providers/UserProvider";
 import db, { firebase } from "../../firebase";
 import { useNavigate } from "react-router-dom";
+import Spinner from "../../shared-components/Spinner";
 import {
     Button,
     Container,
@@ -42,11 +43,13 @@ function CreateRoom() {
     const classes = useStyles();
     const { loggedInUser } = useUser();
     const [formValue, setFormValue] = useState(initialFormValues);
+    const [isLoading, setIsLoading] = useState(false);
 
     const createRoom = (event) => {
         event.preventDefault();
         event.stopPropagation();
         console.log(formValue);
+        setIsLoading(true);
         db.collection("rooms")
             .add({
                 uid: loggedInUser.uid,
@@ -63,107 +66,110 @@ function CreateRoom() {
                 status: "created",
             })
             .then((room) => {
+                setIsLoading(false);
                 navigate(`/rooms/${room.id}`);
-                // console.log(room.id);
-                // db.collection("rooms")
-                //     .doc(room.id)
-                //     .collection("participants")
-                //     .add({
-                //         name: "Ankit",
-                //     });
             })
             .catch((err) => {
+                setIsLoading(false);
                 alert(err.message);
             });
     };
 
     return (
-        <Container maxWidth="sm">
-            <form onSubmit={createRoom} noValidate autoComplete="off">
-                <TextField
-                    fullWidth
-                    required
-                    value={formValue.roomName}
-                    onChange={(e) =>
-                        setFormValue((value) => ({
-                            ...value,
-                            roomName: e.target.value,
-                        }))
-                    }
-                    className={classes.textField}
-                    id="room-name"
-                    label="Room Name"
-                />
-                <TextField
-                    fullWidth
-                    multiline
-                    required
-                    value={formValue.roomDesc}
-                    onChange={(e) =>
-                        setFormValue((value) => ({
-                            ...value,
-                            roomDesc: e.target.value,
-                        }))
-                    }
-                    className={classes.textField}
-                    id="room-desc"
-                    label="Room Description"
-                />
-                <TextField
-                    fullWidth
-                    value={formValue.startDateAndTime}
-                    onChange={(e) =>
-                        setFormValue((value) => ({
-                            ...value,
-                            startDateAndTime: e.target.value,
-                        }))
-                    }
-                    className={classes.dateTimeField}
-                    id="start-time"
-                    label="Start Time"
-                    type="datetime-local"
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                />
-                <FormControl component="fieldset" className={classes.radio}>
-                    <FormLabel component="legend">Type</FormLabel>
-                    <RadioGroup
-                        aria-label="type"
-                        name="type"
-                        value={formValue.type}
-                        onChange={(e) =>
-                            setFormValue((value) => ({
-                                ...value,
-                                type: e.target.value,
-                            }))
-                        }
-                    >
-                        <FormControlLabel
-                            value="public"
-                            control={<Radio />}
-                            label="Public"
+        <>
+            {isLoading && <Spinner />}
+            {!isLoading && (
+                <Container maxWidth="sm">
+                    <form onSubmit={createRoom} noValidate autoComplete="off">
+                        <TextField
+                            fullWidth
+                            required
+                            value={formValue.roomName}
+                            onChange={(e) =>
+                                setFormValue((value) => ({
+                                    ...value,
+                                    roomName: e.target.value,
+                                }))
+                            }
+                            className={classes.textField}
+                            id="room-name"
+                            label="Room Name"
                         />
-                        <FormControlLabel
-                            value="private"
-                            control={<Radio />}
-                            label="Private"
+                        <TextField
+                            fullWidth
+                            multiline
+                            required
+                            value={formValue.roomDesc}
+                            onChange={(e) =>
+                                setFormValue((value) => ({
+                                    ...value,
+                                    roomDesc: e.target.value,
+                                }))
+                            }
+                            className={classes.textField}
+                            id="room-desc"
+                            label="Room Description"
                         />
-                    </RadioGroup>
-                </FormControl>
-                <br />
-                <Grid align="center" className={classes.button}>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                    >
-                        Create
-                    </Button>
-                </Grid>
-            </form>
-        </Container>
+                        <TextField
+                            fullWidth
+                            value={formValue.startDateAndTime}
+                            onChange={(e) =>
+                                setFormValue((value) => ({
+                                    ...value,
+                                    startDateAndTime: e.target.value,
+                                }))
+                            }
+                            className={classes.dateTimeField}
+                            id="start-time"
+                            label="Start Time"
+                            type="datetime-local"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                        <FormControl
+                            component="fieldset"
+                            className={classes.radio}
+                        >
+                            <FormLabel component="legend">Type</FormLabel>
+                            <RadioGroup
+                                aria-label="type"
+                                name="type"
+                                value={formValue.type}
+                                onChange={(e) =>
+                                    setFormValue((value) => ({
+                                        ...value,
+                                        type: e.target.value,
+                                    }))
+                                }
+                            >
+                                <FormControlLabel
+                                    value="public"
+                                    control={<Radio />}
+                                    label="Public"
+                                />
+                                <FormControlLabel
+                                    value="private"
+                                    control={<Radio />}
+                                    label="Private"
+                                />
+                            </RadioGroup>
+                        </FormControl>
+                        <br />
+                        <Grid align="center" className={classes.button}>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                size="large"
+                            >
+                                Create
+                            </Button>
+                        </Grid>
+                    </form>
+                </Container>
+            )}
+        </>
     );
 }
 
