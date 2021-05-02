@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import db from "../../firebase";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useUser } from "../../Providers/UserProvider";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -41,9 +41,70 @@ const useStyles = makeStyles((theme) => ({
 function RoomDetails() {
     const classes = useStyles();
     const { roomId } = useParams();
+    const navigate = useNavigate();
     const [room, setRoom] = useState(null);
     const { loggedInUser } = useUser();
     const [isRoomDetailsLoading, setIsRoomDetailsLoading] = useState(true);
+
+    const startRoom = () => {
+        if (room) {
+            db.collection("rooms")
+                .doc(room.roomId)
+                .update({
+                    status: "live",
+                })
+                .then((response) => {
+                    db.collection("rooms")
+                        .doc(room.roomId)
+                        .collection("participants")
+                        .doc(room.uid)
+                        .set({
+                            role: "creator",
+                            uname: room.uname,
+                            uphotoURL: loggedInUser.photoURL,
+                            uid: loggedInUser.uid,
+                        })
+                        .then(() => {
+                            console.log("Room Created Successfully");
+                            navigate("chats");
+                        })
+                        .catch((error) => {
+                            alert(error.message);
+                        });
+                })
+                .catch((error) => {
+                    alert(error.message);
+                });
+        }
+    };
+
+    const enterRoom = () => {
+        if (room?.status === "live" || room?.status === "saved") {
+            setIsRoomDetailsLoading(true);
+            db.collection("rooms")
+                .doc(room.roomId)
+                .collection("participants")
+                .doc(room.uid)
+                .set({
+                    role:
+                        room.uid === loggedInUser.uid ? "creator" : "spectator",
+                    uname: room.uname,
+                    uphotoURL: loggedInUser.photoURL,
+                    uid: loggedInUser.uid,
+                })
+                .then(() => {
+                    console.log("Entered Inside Room");
+                    navigate("chats");
+                    setIsRoomDetailsLoading(false);
+                })
+                .catch((error) => {
+                    alert(error.message);
+                    setIsRoomDetailsLoading(false);
+                });
+        } else {
+            alert("Room has not been started yet.");
+        }
+    };
 
     useEffect(() => {
         var docRef = db.collection("rooms").doc(roomId);
@@ -89,8 +150,8 @@ function RoomDetails() {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Typography variant="h4">{room.name}</Typography>
-                            <Box variant="subtitle1" fontWeight={600}>
-                                Start at{" "}
+                            <Box variant="subtitle1" fontWeight={500}>
+                                Starts at{" "}
                                 {room.startDateAndTime
                                     .toDate()
                                     .toLocaleString()}
@@ -104,6 +165,19 @@ function RoomDetails() {
                                     color="secondary"
                                 >
                                     *Room has not been started yet.
+                                </Typography>
+                            )}
+                            {room.status === "live" && (
+                                <Typography variant="subtitle2" color="primary">
+                                    Room is Live.
+                                </Typography>
+                            )}
+                            {room.status === "saved" && (
+                                <Typography
+                                    variant="subtitle2"
+                                    color="secondary"
+                                >
+                                    Room is Closed.
                                 </Typography>
                             )}
                         </Grid>
@@ -127,9 +201,10 @@ function RoomDetails() {
                     </Paper>
                     {room.status === "created" &&
                         room.uid === loggedInUser.uid && (
-                            <Grid align="center" fixed>
+                            <Grid align="center" fixed="true">
                                 <Grid item xs={12} md={4}>
                                     <Button
+                                        onClick={() => startRoom()}
                                         fullWidth
                                         size="large"
                                         variant="contained"
@@ -139,21 +214,23 @@ function RoomDetails() {
                                     </Button>
                                 </Grid>
                             </Grid>
-                        )}                
-                    {room.status === "live" && (
-                        <Grid align="center" fixed>
-                            <Grid item xs={12} md={4}>
-                                <Button
-                                    fullWidth
-                                    size="large"
-                                    variant="contained"
-                                    color="primary"
-                                >
-                                    Enter
-                                </Button>
+                        )}
+                    {room.status === "live" ||
+                        (room.status === "saved" && (
+                            <Grid align="center" fixed="true">
+                                <Grid item xs={12} md={4}>
+                                    <Button
+                                        onClick={() => enterRoom()}
+                                        fullWidth
+                                        size="large"
+                                        variant="contained"
+                                        color="primary"
+                                    >
+                                        Enter
+                                    </Button>
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    )}
+                        ))}
                 </Container>
             )}
         </>

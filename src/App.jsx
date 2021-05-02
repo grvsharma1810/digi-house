@@ -8,6 +8,7 @@ import LoginError from "./pages/LoginError/LoginError";
 import CreateRoom from "./pages/CreateRoom/CreateRoom";
 import YourChatrooms from "./pages/YourChatrooms/YourChatrooms";
 import RoomDetails from "./pages/RoomDetails/RoomDetails";
+import ChatRoom from "./pages/ChatRoom/ChatRoom";
 import Drawer from "./shared-components/Drawer";
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/rooms/:roomId" element={<RoomDetails />} />
+                <Route path="/rooms/:roomId/chats" element={<ChatRoom />} />
                 <PrivateRoute path="/create-room" element={<CreateRoom />} />
                 <PrivateRoute
                     path="/your-chatrooms"
