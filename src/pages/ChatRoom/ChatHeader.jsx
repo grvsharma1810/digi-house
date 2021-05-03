@@ -54,7 +54,7 @@ function AlertDialog({ alertDialogOpen, handleClose, room }) {
             aria-describedby="alert-dialog-description"
         >
             <DialogTitle id="alert-dialog-title">
-                {"Use Google's location service?"}
+                {"Save this Discussion"}
             </DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
