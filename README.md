@@ -14,6 +14,7 @@ A Clubhouse appllication with text as medium of exchange.
 5. Raise hand to get Write permission from creator.
 6. Authentication with Google.
 7. Auth Persistence
+8. Emojis
 
 # Team Name : Gaurav Kumar Sharma
 # Total Team Members : 1
