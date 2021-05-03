@@ -1,5 +1,8 @@
+
 # DigiHouse
 A Clubhouse appllication with text as medium of exchange.
+
+[![DigiHouse](http://img.youtube.com/vi/PmIFEFUIYBA/0.jpg)](http://www.youtube.com/watch?v=PmIFEFUIYBA "DigiHouse")
 
 # Tech Stack used :
 1. React
